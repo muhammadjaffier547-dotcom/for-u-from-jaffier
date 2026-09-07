@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Olivia Rodrigo - Drop Dead | TikTok Aesthetic Lyrics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --accent-pink: #ff69b4;
+      --accent-cyan: #00ffff;
+      --accent-purple: #ba55d3;
+      --accent-green: #00ff66;
+      --accent-yellow: #ffd700;
+      --dot-glow: 0 0 14px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 255, 255, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'DotGothic16', 'Silkscreen', monospace;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* CRT Scanline overlay */
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.18) 50%
+      );
+      background-size: 100% 4px;
+      z-index: 50;
+      opacity: 0.45;
+    }
+
+    /* Vignette effect */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.95);
+      z-index: 40;
+    }
+
+    /* Background Canvas */
+    #bgCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    #bgCanvas.active {
+      opacity: 0.96;
+    }
+
+    /* Main Content Wrapper */
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
+
+    /* Intro Title (0s - 7.8s) */
+    .title-screen {
+      position: absolute;
+      text-align: center;
+      transition: opacity 0.8s ease;
+      opacity: 1;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 35;
+      padding: 0 20px;
+    }
+
+    .title-screen.hidden {
+      opacity: 0;
+    }
+
+    .title-song {
+      font-size: clamp(2.4rem, 7vw, 4.6rem);
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-shadow: var(--dot-glow);
+      font-family: 'Silkscreen', 'DotGothic16', monospace;
+      color: #ffffff;
+    }
+
+    .title-artist {
+      font-size: clamp(1.2rem, 3.8vw, 2.4rem);
+      color: #bbbbbb;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      font-family: 'DotGothic16', monospace;
+    }
+
+    /* Lyrics Display Area (Positioned safely in lower chest area at 74%) */
+    .lyrics-container {
+      position: absolute;
+      top: 74%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      max-width: 92%;
+      text-align: center;
+      z-index: 25;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .lyrics-container:active {
+      cursor: grabbing;
+    }
+
+    /* Black aesthetic badge behind lyrics for 100% contrast & legibility */
+    .lyric-pill {
+      background: rgba(0, 0, 0, 0.84);
+      border: 1.5px solid rgba(255, 255, 255, 0.38);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.95), 0 0 15px rgba(0, 0, 0, 0.85);
+      padding: 8px 24px;
+      border-radius: 12px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease;
+      opacity: 0;
+      transform: scale(0.92);
+      max-width: 90vw;
+    }
+
+    .lyric-pill.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .lyric-pill.no-box {
+      background: none;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      padding: 0;
+    }
+
+    .lyric-text {
+      font-size: clamp(1.8rem, 5.2vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 
+        -3px -3px 0 #000,  
+         3px -3px 0 #000,
+        -3px  3px 0 #000,
+         3px  3px 0 #000,
+        -3px  0   0 #000,
+         3px  0   0 #000,
+         0   -3px 0 #000,
+         0    3px 0 #000,
+         0 0 18px rgba(255, 255, 255, 0.95),
+         0 0 32px rgba(255, 255, 255, 0.5);
+      font-family: 'DotGothic16', monospace;
+      line-height: 1.15;
+      text-align: center;
+      word-break: keep-all;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.92);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Outro Box (39.2s - 42s): Default "BY JAFFIER" signature card */
+    .outro-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(88vw, 420px);
+      min-height: min(75vw, 340px);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.35), 0 0 60px rgba(255, 105, 180, 0.25), inset 0 0 25px rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(8, 8, 8, 0.94);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: 30;
+      border-radius: 12px;
+      padding: 26px 20px;
+      text-align: center;
+    }
+
+    .outro-box.active {
+      opacity: 1;
+    }
+
+    .outro-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .outro-badge {
+      font-size: 0.68rem;
+      letter-spacing: 2.5px;
+      color: var(--accent-pink);
+      font-family: 'Space Mono', monospace;
+      border: 1px solid var(--accent-pink);
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255, 105, 180, 0.1);
+    }
+
+    .outro-title {
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+      font-family: 'Silkscreen', monospace;
+      letter-spacing: 2.5px;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+      margin-top: 2px;
+    }
+
+    .outro-divider {
+      width: 65%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+      margin: 4px 0;
+    }
+
+    .outro-by {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: #bbbbbb;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .outro-creator {
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+      font-family: 'Silkscreen', 'DotGothic16', monospace;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #ffffff;
+      text-shadow: 0 0 20px var(--accent-cyan), 0 0 40px var(--accent-pink);
+      animation: pulseGlow 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 20px var(--accent-cyan), 0 0 40px var(--accent-pink);
+      }
+      50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 30px var(--accent-pink), 0 0 50px var(--accent-cyan);
+      }
+    }
+
+    .outro-sub {
+      font-size: 0.68rem;
+      color: #888888;
+      letter-spacing: 1.5px;
+      font-family: 'Space Mono', monospace;
+      margin-top: 4px;
+    }
+
+    /* Anti-theft Corner Watermark */
+    .corner-watermark {
+      position: fixed;
+      bottom: 18px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 1.5px;
+      z-index: 55;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .corner-watermark strong {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    /* Player Controls & Visualizer */
+    .player-dock {
+      position: absolute;
+      bottom: max(18px, env(safe-area-inset-bottom, 18px));
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 30;
+      width: 90%;
+      max-width: 520px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .player-dock.active {
+      opacity: 1;
+    }
+
+    /* Audio Equalizer Spectrum */
+    #visualizerCanvas {
+      width: 100%;
+      height: 42px;
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: -3px;
+      width: 12px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #ffffff;
+    }
+
+    /* Control buttons: ⏮  ▶/⏸  ⏭ */
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .time-info {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, color 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .control-btn:hover {
+      transform: scale(1.25);
+      color: var(--accent-pink);
+    }
+
+    /* Floating Top Toolbar */
+    .top-toolbar {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top, 14px));
+      right: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 7px;
+      z-index: 60;
+      opacity: 0.65;
+      transition: opacity 0.25s ease;
+    }
+
+    .top-toolbar:hover {
+      opacity: 1;
+    }
+
+    .tool-btn {
+      background: rgba(15, 15, 15, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      padding: 6px 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      cursor: pointer;
+      border-radius: 5px;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .tool-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .tool-btn.highlight {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(0, 255, 102, 0.16);
+    }
+
+    /* Zoom control group */
+    .zoom-group {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 15, 15, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 5px;
+      padding: 2px 6px;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .zoom-label {
+      color: #aaaaaa;
+      font-size: 0.7rem;
+    }
+
+    .zoom-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .zoom-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--accent-pink);
+    }
+
+    .zoom-value {
+      color: var(--accent-yellow);
+      font-weight: bold;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      top: 65px;
+      right: 20px;
+      background: rgba(10, 10, 10, 0.94);
+      border: 1px solid var(--accent-green);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      z-index: 100;
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.35);
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      max-width: 85vw;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Drag & Drop Overlay Feedback */
+    .drag-drop-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      border: 3px dashed var(--accent-pink);
+      z-index: 90;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .drag-drop-overlay.active {
+      display: flex;
+    }
+
+    .drag-drop-text {
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--accent-pink);
+      text-shadow: 0 0 15px var(--accent-pink);
+    }
+
+    /* Click-to-start overlay */
+    .start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+      padding: 20px;
+    }
+
+    .start-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .start-prompt {
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+      letter-spacing: 2.5px;
+      text-shadow: 0 0 18px #ffffff;
+      animation: pulse 1.4s infinite ease-in-out;
+      text-align: center;
+      padding: 15px;
+    }
+
+    .start-sub {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 10px;
+      font-family: 'Space Mono', monospace;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.65; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Hidden video elements for processing */
+    #hiddenVideo, #webcamVideo {
+      display: none;
+    }
+
+    /* ----------------------------------------------------------------------
+       RESPONSIVE MOBILE BREAKPOINTS (Optimized for 360px - 768px Smartphones)
+       ---------------------------------------------------------------------- */
+    @media (max-width: 768px) {
+      /* Corner Watermark moved to top-left on mobile so it doesn't clash with player dock */
+      .corner-watermark {
+        top: max(14px, env(safe-area-inset-top, 14px));
+        left: 14px;
+        bottom: auto;
+        padding: 4px 9px;
+        font-size: 0.68rem;
+      }
+
+      /* Compact Toolbar for Mobile: Toggleable drawer */
+      .top-toolbar {
+        top: max(12px, env(safe-area-inset-top, 12px));
+        right: 12px;
+        gap: 5px;
+        max-width: 70vw;
+      }
+
+      .mobile-hide {
+        display: none !important;
+      }
+
+      .mobile-hide.mobile-open {
+        display: flex !important;
+      }
+
+      .tool-btn {
+        padding: 5px 9px;
+        font-size: 0.68rem;
+      }
+
+      .zoom-group {
+        padding: 2px 4px;
+        font-size: 0.68rem;
+      }
+
+      /* Lyrics size tuned for mobile screens */
+      .lyrics-container {
+        top: 72%;
+        width: 94%;
+      }
+
+      .lyric-text {
+        font-size: clamp(1.6rem, 6vw, 2.4rem);
+        letter-spacing: 1.5px;
+      }
+
+      .lyric-pill {
+        padding: 7px 20px;
+        border-radius: 10px;
+      }
+
+      /* Bottom player dock spacing on mobile */
+      .player-dock {
+        width: 94%;
+        bottom: max(16px, env(safe-area-inset-bottom, 16px));
+        gap: 8px;
+      }
+
+      #visualizerCanvas {
+        height: 36px;
+      }
+
+      .btn-group {
+        gap: 20px;
+      }
+
+      .control-btn {
+        font-size: 1.2rem;
+      }
+
+      /* Outro card on mobile */
+      .outro-box {
+        width: 90vw;
+        padding: 20px 14px;
+      }
+
+      .outro-creator {
+        font-size: clamp(1.9rem, 7vw, 2.6rem);
+      }
+    }
+
+    /* ----------------------------------------------------------------------
+       CAMERA SNAP ("CEKREK-CEKREK") & PHOTO SWITCHER ANIMATIONS
+       ---------------------------------------------------------------------- */
+    /* Fullscreen Camera Shutter Flash Overlay */
+    .camera-flash-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      pointer-events: none;
+      z-index: 65;
+      opacity: 0;
+    }
+
+    .camera-flash-overlay.snap {
+      animation: shutterFlashAnim 0.16s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    }
+
+    @keyframes shutterFlashAnim {
+      0% { opacity: 0.95; }
+      40% { opacity: 0.65; }
+      100% { opacity: 0; }
+    }
+
+    /* Background Canvas Recoil / Pop on Shutter Snap */
+    #bgCanvas.snap-recoil {
+      animation: shutterRecoilAnim 0.35s cubic-bezier(0.2, 0.85, 0.35, 1);
+    }
+
+    @keyframes shutterRecoilAnim {
+      0% {
+        transform: scale(1.055);
+        filter: brightness(1.7) contrast(1.15);
+      }
+      35% {
+        transform: scale(0.99);
+        filter: brightness(1.15) contrast(1.05);
+      }
+      100% {
+        transform: scale(1.0);
+        filter: brightness(1.0) contrast(1.0);
+      }
+    }
+
+    /* Retro Camera Viewfinder HUD */
+    .camera-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 66;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .camera-hud.active {
+      opacity: 1;
+    }
+
+    .hud-corner {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-color: rgba(255, 255, 255, 0.9);
+      border-style: solid;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    }
+    .hud-corner.tl { top: 24px; left: 24px; border-width: 2.5px 0 0 2.5px; }
+    .hud-corner.tr { top: 24px; right: 24px; border-width: 2.5px 2.5px 0 0; }
+    .hud-corner.bl { bottom: 85px; left: 24px; border-width: 0 0 2.5px 2.5px; }
+    .hud-corner.br { bottom: 85px; right: 24px; border-width: 0 2.5px 2.5px 0; }
+
+    .hud-center-cross {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 26px;
+      height: 26px;
+      opacity: 0.7;
+    }
+    .hud-center-cross::before, .hud-center-cross::after {
+      content: '';
+      position: absolute;
+      background: #00ffff;
+      box-shadow: 0 0 8px #00ffff;
+    }
+    .hud-center-cross::before {
+      top: 12px; left: 0; width: 26px; height: 2px;
+    }
+    .hud-center-cross::after {
+      top: 0; left: 12px; width: 2px; height: 26px;
+    }
+
+    .hud-badge {
+      position: absolute;
+      top: max(32px, env(safe-area-inset-top, 32px));
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(0, 255, 255, 0.6);
+      color: #00ffff;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      padding: 4px 14px;
+      border-radius: 4px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Ambient Blurred Glow Backdrop (Ultra smooth GPU ambient fill) */
+    .ambient-backdrop {
+      position: fixed;
+      top: -5%;
+      left: -5%;
+      width: 110%;
+      height: 110%;
+      background-size: cover;
+      background-position: center;
+      filter: blur(48px) brightness(0.38) saturate(1.3);
+      -webkit-filter: blur(48px) brightness(0.38) saturate(1.3);
+      transform: scale(1.06);
+      opacity: 0;
+      transition: opacity 0.8s ease, background-image 0.35s ease;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .ambient-backdrop.active {
+      opacity: 0.95;
+    }
+
+    /* On-Screen Photo Indicator Bar (Placed cleanly at top center, never blocking dock or lyrics) */
+    .photo-indicator-bar {
+      position: fixed;
+      top: max(56px, env(safe-area-inset-top, 56px));
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 55;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      background: rgba(12, 12, 12, 0.88);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+    }
+
+    .photo-indicator-bar.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .photo-slot-btn {
+      background: rgba(30, 30, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #cccccc;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .photo-slot-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    .photo-slot-btn.active {
+      background: rgba(0, 255, 102, 0.25);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.5);
+      font-weight: bold;
+    }
+
+    /* Photo Manager Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 120;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .photo-modal {
+      background: #0d0d0d;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 0 50px rgba(255, 105, 180, 0.2);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      gap: 16px;
+      animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    }
+
+    @keyframes modalPop {
+      0% { transform: scale(0.92); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: 'Silkscreen', 'Space Mono', monospace;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-size: 1.1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #ff69b4;
+      color: #ff69b4;
+    }
+
+    .modal-desc {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: #bbbbbb;
+      line-height: 1.5;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .photo-card {
+      background: #141414;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .photo-card:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px rgba(0, 255, 255, 0.2);
+    }
+
+    .photo-card.active-card {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 14px rgba(0, 255, 102, 0.3);
+    }
+
+    .card-thumb-wrap {
+      width: 100%;
+      aspect-ratio: 9 / 13;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #00ff66;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .card-info {
+      width: 100%;
+      text-align: center;
+    }
+
+    .card-lyric {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #aaaaaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-btn-row {
+      display: flex;
+      gap: 5px;
+      width: 100%;
+    }
+
+    .card-btn-action {
+      flex: 1;
+      background: rgba(30, 30, 30, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 5px 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .card-btn-action:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .card-btn-action.change {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .card-btn-action.preview {
+      border-color: var(--accent-pink);
+      color: var(--accent-pink);
+    }
+
+    .modal-actions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 12px;
+    }
+
+    .modal-btn {
+      background: rgba(25, 25, 25, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.74rem;
+      padding: 7px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-btn.primary {
+      background: rgba(0, 255, 102, 0.2);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    .modal-btn.primary:hover {
+      background: rgba(0, 255, 102, 0.35);
+    }
+
+    @media (max-width: 768px) {
+      .top-toolbar.menu-expanded {
+        background: rgba(12, 12, 12, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.95);
+        max-width: 90vw;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        gap: 8px;
+        justify-content: center;
+      }
+      .photo-indicator-bar {
+        top: max(50px, env(safe-area-inset-top, 50px));
+        bottom: auto;
+        gap: 5px;
+        padding: 4px 10px;
+      }
+      .photo-slot-btn {
+        padding: 3px 8px;
+        font-size: 0.68rem;
+      }
+      .photo-modal {
+        padding: 16px 12px;
+        max-height: 88vh;
+        gap: 12px;
+      }
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .card-thumb-wrap {
+        aspect-ratio: 9 / 12;
+      }
+      .modal-actions-bar {
+        justify-content: center;
+        gap: 6px;
+      }
+      .modal-btn {
+        padding: 6px 10px;
+        font-size: 0.68rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen overlays -->
+  <div class="crt-overlay"></div>
+  <div class="vignette"></div>
+
+  <!-- Camera Shutter Flash & HUD Overlays -->
+  <div class="camera-flash-overlay" id="cameraFlash"></div>
+  <div class="camera-hud" id="cameraHud">
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+    <div class="hud-center-cross"></div>
+    <div class="hud-badge" id="cameraHudText">● SHUTTER [01/04] • 1/250s</div>
+  </div>
+
+  <!-- Drag & Drop visual feedback -->
+  <div class="drag-drop-overlay" id="dragDropOverlay">
+    <div class="drag-drop-text">📥 Lepaskan Gambar / Video di Sini</div>
+  </div>
+
+  <!-- Anti-Theft Corner Watermark -->
+  <div class="corner-watermark">
+    <span>⚡</span>
+    <span>edit by <strong id="wmName">jaffier</strong></span>
+  </div>
+
+  <!-- Ambient Blurred Glow Backdrop -->
+  <div class="ambient-backdrop" id="ambientBackdrop"></div>
+
+  <!-- Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Stage -->
+  <div class="stage">
+
+    <!-- Title Screen (0s - 7.8s) -->
+    <div class="title-screen" id="titleScreen">
+      <div class="title-song">DROP DEAD</div>
+      <div class="title-artist">Olivia Rodrigo</div>
+    </div>
+
+    <!-- Lyrics Container (Positioned safely below chin & face, with touch & mouse drag support!) -->
+    <div class="lyrics-container" id="lyricsContainer" title="💡 Sentuh & geser untuk memindahkan posisi teks sesuka hati!">
+      <div class="lyric-pill" id="lyricPill">
+        <div class="lyric-text" id="lyricDisplay"></div>
+      </div>
+    </div>
+
+    <!-- Outro Box (39.2s - 42s): Default "BY JAFFIER" signature card! -->
+    <div class="outro-box" id="outroBox">
+      <div class="outro-card">
+        <div class="outro-badge">TIKTOK AESTHETIC EDIT</div>
+        <div class="outro-title">DROP DEAD</div>
+        <div class="outro-divider"></div>
+        <div class="outro-by">EDIT BY</div>
+        <div class="outro-creator" id="creatorCardName">JAFFIER</div>
+        <div class="outro-sub">★ ORIGINAL EDIT • DO NOT REPOST ★</div>
+      </div>
+    </div>
+
+    <!-- Photo Indicator Bar (Active during Chorus Drop: 23.2s - 38.8s or Preview) -->
+    <div class="photo-indicator-bar" id="photoIndicatorBar">
+      <button class="photo-slot-btn active" data-slot="0" title="Foto 1: Bathroom Line (23.2s)">📸 1</button>
+      <button class="photo-slot-btn" data-slot="1" title="Foto 2: Versailles (27.2s)">📸 2</button>
+      <button class="photo-slot-btn" data-slot="2" title="Foto 3: Most Alive (31.0s)">📸 3</button>
+      <button class="photo-slot-btn" data-slot="3" title="Foto 4: Kiss Me (34.6s)">📸 4</button>
+    </div>
+
+    <!-- Player Dock with Equalizer & Controls -->
+    <div class="player-dock" id="playerDock">
+      <!-- Spectrum Audio Visualizer -->
+      <canvas id="visualizerCanvas" width="500" height="42"></canvas>
+
+      <!-- Progress bar -->
+      <div class="progress-bar-wrap" id="progressBarWrap">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <!-- Control buttons -->
+      <div class="controls-row">
+        <span class="time-info" id="timeCurrent">00:00</span>
+        <div class="btn-group">
+          <button class="control-btn" id="btnPrev" title="Restart Lagu (⏮)">⏮</button>
+          <button class="control-btn" id="btnPlayPause" title="Play/Pause (Space)">▶</button>
+          <button class="control-btn" id="btnNext" title="Lompat ke Chorus Drop (⏭)">⏭</button>
+        </div>
+        <span class="time-info" id="timeTotal">00:42</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Top Toolbar -->
+  <div class="top-toolbar">
+    <!-- Primary Always-Visible Buttons on Mobile -->
+    <button class="tool-btn highlight" id="btnOpenPhotoModal" title="Atur 4 foto chorus drop & animasi cekrek">📸 4 Foto Drop</button>
+    <button class="tool-btn highlight" id="btnMobileMenu" title="Buka menu pengaturan lengkap">⚙️ Menu</button>
+
+    <!-- Secondary Controls (Collapsible on Mobile, always open on Desktop) -->
+    <button class="tool-btn mobile-hide highlight" id="btnPosText" title="Ubah letak posisi lirik (Bawah / Tengah / Atas)">📍 Posisi: Bawah</button>
+    <button class="tool-btn mobile-hide highlight" id="btnToggleBox" title="Toggle background hitam di balik teks lirik">🏷️ Box Hitam</button>
+    <button class="tool-btn mobile-hide highlight" id="btnStyleMode" title="Ubah tampilan: Foto Jelas / Scanline / ASCII">✨ Gaya: Foto Jelas</button>
+    <button class="tool-btn mobile-hide highlight" id="btnFitMode" title="Ubah mode: TikTok Pas / Full Layar / Foto Asli">✨ TikTok Pas</button>
+    
+    <!-- Zoom Controls -->
+    <div class="zoom-group mobile-hide">
+      <span class="zoom-label">🔍</span>
+      <button class="zoom-btn" id="btnZoomOut" title="Perkecil">−</button>
+      <span class="zoom-value" id="zoomValue">100%</span>
+      <button class="zoom-btn" id="btnZoomIn" title="Perbesar">+</button>
+    </div>
+
+    <!-- Watermark Name Editor -->
+    <button class="tool-btn mobile-hide" id="btnChangeName" title="Ubah nama watermark credit">✍️ Credit: jaffier</button>
+    <button class="tool-btn mobile-hide" id="btnTestPreview" title="Uji coba lihat tampilan background sekarang">👁️ Preview</button>
+    <button class="tool-btn mobile-hide" id="btnFullscreen" title="Layar Penuh (F11)">⛶ Fullscreen</button>
+    
+    <!-- Hidden Legacy File Input for Video/General Upload -->
+    <input type="file" id="bgFileInput" accept="image/*,video/*" style="display: none;" />
+  </div>
+
+  <!-- Photo Manager Modal -->
+  <div class="modal-overlay" id="photoModalOverlay">
+    <div class="photo-modal">
+      <div class="modal-header">
+        <div class="modal-title">📸 4 FOTO CHORUS DROP</div>
+        <button class="modal-close-btn" id="btnClosePhotoModal">✕</button>
+      </div>
+      <div class="modal-desc">
+        4 foto berganti otomatis dengan animasi cekrek-cekrek kamera saat Chorus Drop (23.2s - 38.8s). Kamu bisa ubah atau ganti foto mana saja!
+      </div>
+
+      <div class="photo-grid">
+        <!-- Slot 1 -->
+        <div class="photo-card" id="cardSlot0">
+          <div class="card-thumb-wrap">
+            <img id="thumb0" src="photo1.jpg" alt="Foto 1" class="card-thumb" />
+            <span class="card-badge">1 • 23.2s</span>
+          </div>
+          <div class="card-info">
+            <div class="card-lyric">"Bathroom Line"</div>
+          </div>
+          <div class="card-btn-row">
+            <button class="card-btn-action change" id="btnChangeSlot0">📁 Ganti</button>
+            <button class="card-btn-action preview" id="btnPreviewSlot0">👁️ Lihat</button>
+          </div>
+        </div>
+
+        <!-- Slot 2 -->
+        <div class="photo-card" id="cardSlot1">
+          <div class="card-thumb-wrap">
+            <img id="thumb1" src="photo2.png" alt="Foto 2" class="card-thumb" />
+            <span class="card-badge">2 • 26.7s</span>
+          </div>
+          <div class="card-info">
+            <div class="card-lyric">"Versailles"</div>
+          </div>
+          <div class="card-btn-row">
+            <button class="card-btn-action change" id="btnChangeSlot1">📁 Ganti</button>
+            <button class="card-btn-action preview" id="btnPreviewSlot1">👁️ Lihat</button>
+          </div>
+        </div>
+
+        <!-- Slot 3 -->
+        <div class="photo-card" id="cardSlot2">
+          <div class="card-thumb-wrap">
+            <img id="thumb2" src="photo3.jpg" alt="Foto 3" class="card-thumb" />
+            <span class="card-badge">3 • 31.0s</span>
+          </div>
+          <div class="card-info">
+            <div class="card-lyric">"Most Alive"</div>
+          </div>
+          <div class="card-btn-row">
+            <button class="card-btn-action change" id="btnChangeSlot2">📁 Ganti</button>
+            <button class="card-btn-action preview" id="btnPreviewSlot2">👁️ Lihat</button>
+          </div>
+        </div>
+
+        <!-- Slot 4 -->
+        <div class="photo-card" id="cardSlot3">
+          <div class="card-thumb-wrap">
+            <img id="thumb3" src="photo4.jpg" alt="Foto 4" class="card-thumb" />
+            <span class="card-badge">4 • 34.1s</span>
+          </div>
+          <div class="card-info">
+            <div class="card-lyric">"Kiss Me"</div>
+          </div>
+          <div class="card-btn-row">
+            <button class="card-btn-action change" id="btnChangeSlot3">📁 Ganti</button>
+            <button class="card-btn-action preview" id="btnPreviewSlot3">👁️ Lihat</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions-bar">
+        <button class="modal-btn primary" id="btnPickAllFiles">⚡ Ganti Sekaligus (Pilih 4 Foto)</button>
+        <button class="modal-btn" id="btnTestShutterModal">📸 Tes Cekrek</button>
+        <button class="modal-btn" id="btnToggleSoundModal">🔊 Suara: ON</button>
+        <button class="modal-btn" id="btnResetPhotosModal">↺ Reset Default</button>
+      </div>
+
+      <!-- Hidden individual & batch file pickers -->
+      <input type="file" id="slotPicker0" accept="image/*" style="display:none;" />
+      <input type="file" id="slotPicker1" accept="image/*" style="display:none;" />
+      <input type="file" id="slotPicker2" accept="image/*" style="display:none;" />
+      <input type="file" id="slotPicker3" accept="image/*" style="display:none;" />
+      <input type="file" id="batchPicker" accept="image/*" multiple style="display:none;" />
+    </div>
+  </div>
+
+  <!-- Toast Notification Message -->
+  <div class="toast-msg" id="toastMsg">✅ Foto berhasil dimuat!</div>
+
+  <!-- Start Overlay (Autoplay policy handler, optimized for Touch & Click) -->
+  <div class="start-overlay" id="startOverlay">
+    <div class="start-prompt">TAP ANYWHERE TO PLAY</div>
+    <div class="start-sub">[ Edit by jaffier • Geser teks bebas dengan sentuhan layar ]</div>
+  </div>
+
+  <!-- Hidden video & webcam elements -->
+  <video id="hiddenVideo" loop playsinline muted></video>
+  <video id="webcamVideo" autoplay playsinline muted></video>
+
+  <!-- Audio element with TikTok sound -->
+  <audio id="audioElement" src="drop_dead.mp3" preload="auto"></audio>
+
+  <script>
+    // ----------------------------------------------------------------------
+    // 1. EXACT LYRICS SYNCHRONIZATION DATA (Matched to drop_dead.mp3 audio)
+    // ----------------------------------------------------------------------
+    const lyricsData = [
+      { start: 8.7,  end: 9.1,  text: "One" },
+      { start: 9.1,  end: 9.7,  text: "Night" },
+      { start: 9.7,  end: 10.1, text: "I" },
+      { start: 10.1, end: 10.6, text: "Was" },
+      { start: 10.6, end: 11.1, text: "Bored" },
+      { start: 11.1, end: 11.6, text: "In" },
+      { start: 11.6, end: 12.2, text: "Bed" },
+      { start: 12.3, end: 12.7, text: "And" },
+      { start: 12.7, end: 13.4, text: "Stalked" },
+      { start: 13.4, end: 14.0, text: "You" },
+      { start: 14.0, end: 14.4, text: "On" },
+      { start: 14.4, end: 14.7, text: "The" },
+      { start: 14.7, end: 15.8, text: "Internet" },
+      { start: 15.9, end: 16.4, text: "It's" },
+      { start: 16.4, end: 17.5, text: "Feminine" },
+      { start: 17.5, end: 18.7, text: "Intuition" },
+      { start: 18.8, end: 19.3, text: "'Cause" },
+      { start: 19.3, end: 19.9, text: "I Always" },
+      { start: 19.9, end: 20.4, text: "Had" },
+      { start: 20.4, end: 21.0, text: "A Vision" },
+      { start: 21.0, end: 21.6, text: "Of Us" },
+      { start: 21.6, end: 22.2, text: "Standing" },
+      { start: 22.2, end: 22.7, text: "Like" },
+      { start: 22.7, end: 23.2, text: "This" },
+
+      // Chorus Drop (23.2s: Background activates in Auto mode!)
+      { start: 23.2, end: 23.8, text: "All" },
+      { start: 23.8, end: 24.4, text: "Pressed Up" },
+      { start: 24.4, end: 24.8, text: "In" },
+      { start: 24.8, end: 25.2, text: "The" },
+      { start: 25.2, end: 26.0, text: "Bathroom" },
+      { start: 26.0, end: 26.7, text: "Line" },
+      { start: 26.7, end: 27.2, text: "You're" },
+      { start: 27.2, end: 27.8, text: "Lookin'" },
+      { start: 27.8, end: 28.2, text: "Like" },
+      { start: 28.2, end: 29.0, text: "An Angel" },
+      { start: 29.0, end: 29.5, text: "On The" },
+      { start: 29.5, end: 30.1, text: "Walls Of" },
+      { start: 30.1, end: 31.0, text: "Versailles" },
+      { start: 31.0, end: 31.4, text: "The" },
+      { start: 31.4, end: 31.9, text: "Most" },
+      { start: 31.9, end: 32.5, text: "Alive" },
+      { start: 32.5, end: 33.0, text: "I've" },
+      { start: 33.0, end: 33.5, text: "Ever" },
+      { start: 33.5, end: 34.1, text: "Been" },
+      { start: 34.1, end: 34.6, text: "But" },
+      { start: 34.6, end: 35.1, text: "Kiss" },
+      { start: 35.1, end: 35.6, text: "Me" },
+      { start: 35.6, end: 36.1, text: "And" },
+      { start: 36.1, end: 36.6, text: "I" },
+      { start: 36.6, end: 37.5, text: "Might..." },
+    ];
+
+    // ASCII characters ramp (only used if user chooses ASCII mode)
+    const ASCII_CHARS = "  ..::--==++**##%%@@";
+
+    // DOM Elements
+    const audio = document.getElementById("audioElement");
+    const startOverlay = document.getElementById("startOverlay");
+    const titleScreen = document.getElementById("titleScreen");
+    const playerDock = document.getElementById("playerDock");
+    const lyricsContainer = document.getElementById("lyricsContainer");
+    const lyricDisplay = document.getElementById("lyricDisplay");
+    const lyricPill = document.getElementById("lyricPill");
+    const outroBox = document.getElementById("outroBox");
+    const creatorCardName = document.getElementById("creatorCardName");
+    const wmName = document.getElementById("wmName");
+    const progressFill = document.getElementById("progressFill");
+    const progressBarWrap = document.getElementById("progressBarWrap");
+    const timeCurrent = document.getElementById("timeCurrent");
+    const timeTotal = document.getElementById("timeTotal");
+    const btnPlayPause = document.getElementById("btnPlayPause");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const btnFullscreen = document.getElementById("btnFullscreen");
+    const btnOpenPhotoModal = document.getElementById("btnOpenPhotoModal");
+    const photoModalOverlay = document.getElementById("photoModalOverlay");
+    const btnClosePhotoModal = document.getElementById("btnClosePhotoModal");
+    const photoIndicatorBar = document.getElementById("photoIndicatorBar");
+    const cameraFlash = document.getElementById("cameraFlash");
+    const cameraHud = document.getElementById("cameraHud");
+    const cameraHudText = document.getElementById("cameraHudText");
+    const btnPickAllFiles = document.getElementById("btnPickAllFiles");
+    const btnTestShutterModal = document.getElementById("btnTestShutterModal");
+    const btnToggleSoundModal = document.getElementById("btnToggleSoundModal");
+    const btnResetPhotosModal = document.getElementById("btnResetPhotosModal");
+    const batchPicker = document.getElementById("batchPicker");
+
+    const btnMobileMenu = document.getElementById("btnMobileMenu");
+    const btnStyleMode = document.getElementById("btnStyleMode");
+    const btnFitMode = document.getElementById("btnFitMode");
+    const btnToggleBox = document.getElementById("btnToggleBox");
+    const btnPosText = document.getElementById("btnPosText");
+    const btnZoomIn = document.getElementById("btnZoomIn");
+    const btnZoomOut = document.getElementById("btnZoomOut");
+    const zoomValue = document.getElementById("zoomValue");
+    const btnChangeName = document.getElementById("btnChangeName");
+    const btnTestPreview = document.getElementById("btnTestPreview");
+    const bgFileInput = document.getElementById("bgFileInput");
+    const toastMsg = document.getElementById("toastMsg");
+    const dragDropOverlay = document.getElementById("dragDropOverlay");
+
+    const bgCanvas = document.getElementById("bgCanvas");
+    const bgCtx = bgCanvas.getContext("2d");
+    const ambientBackdrop = document.getElementById("ambientBackdrop");
+    const visualizerCanvas = document.getElementById("visualizerCanvas");
+    const vizCtx = visualizerCanvas.getContext("2d");
+
+    const hiddenVideo = document.getElementById("hiddenVideo");
+    const webcamVideo = document.getElementById("webcamVideo");
+
+    // State Variables
+    let audioCtx = null;
+    let analyser = null;
+    let dataArray = null;
+    let isPreviewForced = false;
+    let isBoxBgActive = true;
+    let currentSourceType = "image";
+    let creatorName = "jaffier";
+    let isMobileMenuOpen = false;
+
+    // Position Preset State: 'bottom' (74%), 'low' (79%), 'center' (50%), 'top' (22%)
+    let currentPositionPreset = "bottom"; 
+
+    // Visual Style: 'clean' | 'scanline' | 'ascii'
+    let visualStyle = "clean"; 
+
+    // Sizing Configuration (Default 'auto': TikTok 9:16 Pas + Ambient Blur)
+    let fitMode = "auto"; 
+    let userScale = 1.0;     
+
+    // ----------------------------------------------------------------------
+    // 4 DEFAULT PHOTOS & CAMERA SHUTTER STATE (Exact Lyrics Vocal Sync)
+    // ----------------------------------------------------------------------
+    const DEFAULT_PHOTO_URLS = [
+      "photo1.jpg",
+      "photo2.png",
+      "photo3.jpg",
+      "photo4.jpg"
+    ];
+
+    const photoSlotMeta = [
+      { index: 0, start: 23.2, end: 26.7, lyric: "All Pressed Up In The Bathroom Line" },
+      { index: 1, start: 26.7, end: 31.0, lyric: "Lookin' Like An Angel On The Walls Of Versailles" },
+      { index: 2, start: 31.0, end: 34.1, lyric: "The Most Alive I've Ever Been" },
+      { index: 3, start: 34.1, end: 38.8, lyric: "But Kiss Me And I Might..." }
+    ];
+
+    let photoDataUrls = [...DEFAULT_PHOTO_URLS];
+    let photoImageObjects = [new Image(), new Image(), new Image(), new Image()];
+
+    function loadAllPhotos() {
+      photoDataUrls.forEach((url, idx) => {
+        const img = new Image();
+        img.src = url;
+        photoImageObjects[idx] = img;
+      });
+    }
+    loadAllPhotos();
+
+    let activePhotoIndex = 0;
+    let lastPhotoIndex = -1;
+    let shutterSoundEnabled = true;
+
+    // Legacy fallback image object
+    let bgImageObj = photoImageObjects[0];
+
+    // Offscreen sampling canvas for ASCII processing (when ascii mode is active)
+    const sampleCanvas = document.createElement("canvas");
+    const sampleCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
+
+    // Toast utility
+    let toastTimeout = null;
+    function showToast(message) {
+      toastMsg.textContent = message;
+      toastMsg.classList.add("show");
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastMsg.classList.remove("show");
+      }, 3000);
+    }
+
+    // Handle Window Resize (Adapts cleanly on rotation & mobile viewports)
+    function resizeCanvases() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvases);
+    window.addEventListener("orientationchange", () => setTimeout(resizeCanvases, 200));
+    resizeCanvases();
+
+    // ----------------------------------------------------------------------
+    // 2. AUDIO & PLAYBACK INITIALIZATION (Touch & Click Support)
+    // ----------------------------------------------------------------------
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        const track = audioCtx.createMediaElementSource(audio);
+        track.connect(analyser);
+        analyser.connect(audioCtx.destination);
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    }
+
+    function handleStartInteraction() {
+      initAudio();
+      startOverlay.classList.add("hidden");
+      isPreviewForced = false;
+      btnTestPreview.classList.remove("highlight");
+      btnTestPreview.textContent = "👁️ Preview";
+      audio.play().catch(e => console.log(e));
+      btnPlayPause.textContent = "⏸";
+    }
+
+    startOverlay.addEventListener("click", handleStartInteraction);
+    startOverlay.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      handleStartInteraction();
+    });
+
+    btnPlayPause.addEventListener("click", () => {
+      initAudio();
+      if (audio.paused) {
+        audio.play();
+        btnPlayPause.textContent = "⏸";
+      } else {
+        audio.pause();
+        btnPlayPause.textContent = "▶";
+      }
+    });
+
+    btnPrev.addEventListener("click", () => {
+      audio.currentTime = 0;
+      isPreviewForced = false;
+      lastPhotoIndex = -1;
+      btnTestPreview.classList.remove("highlight");
+      btnTestPreview.textContent = "👁️ Preview";
+      if (audio.paused) audio.play();
+    });
+
+    btnNext.addEventListener("click", () => {
+      // Jump directly to Chorus Drop (23.2s)
+      audio.currentTime = 23.0;
+      lastPhotoIndex = -1;
+      if (audio.paused) audio.play();
+      showToast("⏭ Lompat ke Chorus Drop (23.2s)");
+    });
+
+    progressBarWrap.addEventListener("click", (e) => {
+      const rect = progressBarWrap.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      if (audio.duration) {
+        audio.currentTime = pos * audio.duration;
+        lastPhotoIndex = -1;
+      }
+    });
+
+    function formatTime(sec) {
+      if (isNaN(sec)) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    // Keyboard Shortcuts (Desktop)
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        btnPlayPause.click();
+      } else if (e.key === "f" || e.key === "F") {
+        toggleFullscreen();
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          document.documentElement.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    }
+    btnFullscreen.addEventListener("click", toggleFullscreen);
+
+    // ----------------------------------------------------------------------
+    // 3. MOBILE MENU TOGGLE
+    // ----------------------------------------------------------------------
+    btnMobileMenu.addEventListener("click", () => {
+      isMobileMenuOpen = !isMobileMenuOpen;
+      const toolbar = document.querySelector(".top-toolbar");
+      if (toolbar) toolbar.classList.toggle("menu-expanded", isMobileMenuOpen);
+      const hiddenTools = document.querySelectorAll(".mobile-hide");
+      hiddenTools.forEach(el => {
+        if (isMobileMenuOpen) {
+          el.classList.add("mobile-open");
+        } else {
+          el.classList.remove("mobile-open");
+        }
+      });
+      btnMobileMenu.textContent = isMobileMenuOpen ? "✕ Tutup" : "⚙️ Menu";
+    });
+
+    // ----------------------------------------------------------------------
+    // 4. TOUCH & MOUSE DRAGGABLE LYRICS
+    // ----------------------------------------------------------------------
+    let isDraggingLyric = false;
+    let dragStartX = 0, dragStartY = 0;
+    let elemStartX = 0, elemStartY = 0;
+
+    function startDrag(e) {
+      isDraggingLyric = true;
+      const point = e.touches ? e.touches[0] : e;
+      dragStartX = point.clientX;
+      dragStartY = point.clientY;
+
+      const rect = lyricsContainer.getBoundingClientRect();
+      elemStartX = rect.left + rect.width / 2;
+      elemStartY = rect.top + rect.height / 2;
+    }
+
+    function doDrag(e) {
+      if (!isDraggingLyric) return;
+      const point = e.touches ? e.touches[0] : e;
+      const dx = point.clientX - dragStartX;
+      const dy = point.clientY - dragStartY;
+
+      const newLeft = elemStartX + dx;
+      const newTop = elemStartY + dy;
+
+      lyricsContainer.style.left = `${newLeft}px`;
+      lyricsContainer.style.top = `${newTop}px`;
+      lyricsContainer.style.transform = "translate(-50%, -50%)";
+    }
+
+    function stopDrag() {
+      if (isDraggingLyric) {
+        isDraggingLyric = false;
+        showToast("📍 Posisi teks disimpan!");
+      }
+    }
+
+    lyricsContainer.addEventListener("mousedown", startDrag);
+    window.addEventListener("mousemove", doDrag);
+    window.addEventListener("mouseup", stopDrag);
+
+    lyricsContainer.addEventListener("touchstart", (e) => {
+      e.stopPropagation();
+      startDrag(e);
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (e) => {
+      if (isDraggingLyric) {
+        doDrag(e);
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchend", stopDrag);
+
+    // Position Preset Switcher Button
+    btnPosText.addEventListener("click", () => {
+      lyricsContainer.style.left = "50%";
+      lyricsContainer.style.transform = "translate(-50%, -50%)";
+
+      if (currentPositionPreset === "bottom") {
+        currentPositionPreset = "low";
+        lyricsContainer.style.top = "79%";
+        btnPosText.textContent = "📍 Posisi: Dekat Bar";
+        showToast("📍 Posisi: Dekat Bar Musik");
+      } else if (currentPositionPreset === "low") {
+        currentPositionPreset = "top";
+        lyricsContainer.style.top = "20%";
+        btnPosText.textContent = "📍 Posisi: Atas Kepala";
+        showToast("📍 Posisi: Di Atas Kepala (Wajah Bersih)");
+      } else if (currentPositionPreset === "top") {
+        currentPositionPreset = "center";
+        lyricsContainer.style.top = "50%";
+        btnPosText.textContent = "📍 Posisi: Tengah";
+        showToast("📍 Posisi: Tengah");
+      } else {
+        currentPositionPreset = "bottom";
+        lyricsContainer.style.top = "72%";
+        btnPosText.textContent = "📍 Posisi: Bawah";
+        showToast("📍 Posisi: Bawah Dada (Wajah 100% Bebas)");
+      }
+    });
+
+    // ----------------------------------------------------------------------
+    // 5. STYLE, SIZING & WATERMARK CONTROLS
+    // ----------------------------------------------------------------------
+    // Toggle Text Box Background
+    btnToggleBox.addEventListener("click", () => {
+      isBoxBgActive = !isBoxBgActive;
+      if (isBoxBgActive) {
+        lyricPill.classList.remove("no-box");
+        btnToggleBox.textContent = "🏷️ Box Hitam: ON";
+        btnToggleBox.classList.add("highlight");
+        showToast("🏷️ Latar Teks: Box Hitam Aktif (Kontras Maksimal)");
+      } else {
+        lyricPill.classList.add("no-box");
+        btnToggleBox.textContent = "🏷️ Box Hitam: OFF";
+        btnToggleBox.classList.remove("highlight");
+        showToast("🏷️ Latar Teks: Outline Saja (Tanpa Box)");
+      }
+    });
+
+    // Change Creator Watermark Name
+    btnChangeName.addEventListener("click", () => {
+      const newName = prompt("Masukkan nama/username kredit kamu:", creatorName);
+      if (newName && newName.trim() !== "") {
+        creatorName = newName.trim();
+        creatorCardName.textContent = creatorName.toUpperCase();
+        wmName.textContent = creatorName;
+        btnChangeName.textContent = `✍️ Credit: ${creatorName}`;
+        showToast(`✅ Watermark diubah: by ${creatorName}`);
+      }
+    });
+
+    // Toggle Visual Style: Clean -> Scanline -> ASCII
+    btnStyleMode.addEventListener("click", () => {
+      if (visualStyle === "clean") {
+        visualStyle = "scanline";
+        btnStyleMode.textContent = "📺 Gaya: Scanline";
+        btnStyleMode.classList.remove("highlight");
+        showToast("📺 Mode: Foto Jelas + Scanline Halus");
+      } else if (visualStyle === "scanline") {
+        visualStyle = "ascii";
+        btnStyleMode.textContent = "👾 Gaya: ASCII";
+        btnStyleMode.classList.remove("highlight");
+        showToast("👾 Mode: Karakter ASCII Matrix");
+      } else {
+        visualStyle = "clean";
+        btnStyleMode.textContent = "✨ Gaya: Foto Jelas";
+        btnStyleMode.classList.add("highlight");
+        showToast("✨ Mode: Foto Jelas Asli (Tanpa Bintik)");
+      }
+    });
+
+    // Toggle Sizing Mode: auto (TikTok Pas) -> cover (Full Layar) -> contain (Foto Asli)
+    btnFitMode.addEventListener("click", () => {
+      if (fitMode === "auto") {
+        fitMode = "cover";
+        btnFitMode.textContent = "📏 Full Layar";
+        showToast("📏 Mode: Full Layar Penuh (Edge to Edge)");
+      } else if (fitMode === "cover") {
+        fitMode = "contain";
+        btnFitMode.textContent = "📐 Foto Asli";
+        showToast("📐 Mode: Foto Asli (Proporsional Tanpa Terpotong)");
+      } else {
+        fitMode = "auto";
+        btnFitMode.textContent = "✨ TikTok Pas";
+        showToast("✨ Mode: TikTok 9:16 Pas + Ambient Blur");
+      }
+    });
+
+    // Zoom Buttons
+    btnZoomIn.addEventListener("click", () => {
+      userScale = Math.min(2.0, userScale + 0.1);
+      zoomValue.textContent = `${Math.round(userScale * 100)}%`;
+      showToast(`🔍 Skala: ${Math.round(userScale * 100)}%`);
+    });
+
+    btnZoomOut.addEventListener("click", () => {
+      userScale = Math.max(0.4, userScale - 0.1);
+      zoomValue.textContent = `${Math.round(userScale * 100)}%`;
+      showToast(`🔍 Skala: ${Math.round(userScale * 100)}%`);
+    });
+
+    // ----------------------------------------------------------------------
+    // 6. CAMERA SHUTTER SOUND SYNTHESIZER & ANIMATION TRIGGER
+    // ----------------------------------------------------------------------
+    function playShutterSound() {
+      if (!shutterSoundEnabled) return;
+      try {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+
+        // Click 1: Shutter curtain opens (Metallic highpass noise burst)
+        const dur1 = 0.012;
+        const bufLen1 = Math.floor(audioCtx.sampleRate * dur1);
+        const noiseBuf1 = audioCtx.createBuffer(1, bufLen1, audioCtx.sampleRate);
+        const data1 = noiseBuf1.getChannelData(0);
+        for (let i = 0; i < bufLen1; i++) {
+          data1[i] = Math.random() * 2 - 1;
+        }
+        const noiseSrc1 = audioCtx.createBufferSource();
+        noiseSrc1.buffer = noiseBuf1;
+
+        const hpFilter = audioCtx.createBiquadFilter();
+        hpFilter.type = "highpass";
+        hpFilter.frequency.setValueAtTime(3200, now);
+
+        const gain1 = audioCtx.createGain();
+        gain1.gain.setValueAtTime(0.75, now);
+        gain1.gain.exponentialRampToValueAtTime(0.01, now + dur1);
+
+        noiseSrc1.connect(hpFilter);
+        hpFilter.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        noiseSrc1.start(now);
+
+        // Click 2: Shutter closes + mirror thump (36ms delay)
+        const t2 = now + 0.036;
+        const dur2 = 0.025;
+        const bufLen2 = Math.floor(audioCtx.sampleRate * dur2);
+        const noiseBuf2 = audioCtx.createBuffer(1, bufLen2, audioCtx.sampleRate);
+        const data2 = noiseBuf2.getChannelData(0);
+        for (let i = 0; i < bufLen2; i++) {
+          data2[i] = (Math.random() * 2 - 1) * 0.7;
+        }
+        const noiseSrc2 = audioCtx.createBufferSource();
+        noiseSrc2.buffer = noiseBuf2;
+
+        const bpFilter = audioCtx.createBiquadFilter();
+        bpFilter.type = "bandpass";
+        bpFilter.frequency.setValueAtTime(1200, t2);
+        bpFilter.Q.setValueAtTime(3.0, t2);
+
+        const gain2 = audioCtx.createGain();
+        gain2.gain.setValueAtTime(0.85, t2);
+        gain2.gain.exponentialRampToValueAtTime(0.01, t2 + dur2);
+
+        noiseSrc2.connect(bpFilter);
+        bpFilter.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        noiseSrc2.start(t2);
+
+        // Low body thump for camera mirror recoil
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(180, t2);
+        osc.frequency.exponentialRampToValueAtTime(40, t2 + 0.035);
+
+        oscGain.gain.setValueAtTime(0.65, t2);
+        oscGain.gain.exponentialRampToValueAtTime(0.01, t2 + 0.035);
+
+        osc.connect(oscGain);
+        oscGain.connect(audioCtx.destination);
+        osc.start(t2);
+        osc.stop(t2 + 0.04);
+
+      } catch (e) {
+        console.warn("Shutter audio:", e);
+      }
+    }
+
+    function triggerCameraSnap(slotIndex, playSound = true) {
+      activePhotoIndex = slotIndex;
+
+      // 1. Audio shutter click
+      if (playSound) {
+        playShutterSound();
+      }
+
+      // 2. Fullscreen flash
+      if (cameraFlash) {
+        cameraFlash.classList.remove("snap");
+        void cameraFlash.offsetWidth; // force reflow
+        cameraFlash.classList.add("snap");
+      }
+
+      // 3. Canvas Recoil
+      if (bgCanvas) {
+        bgCanvas.classList.remove("snap-recoil");
+        void bgCanvas.offsetWidth;
+        bgCanvas.classList.add("snap-recoil");
+      }
+
+      // 4. Viewfinder HUD
+      if (cameraHud) {
+        if (cameraHudText) {
+          cameraHudText.textContent = `● SHUTTER [0${slotIndex + 1}/04] • 1/250s`;
+        }
+        cameraHud.classList.remove("active");
+        void cameraHud.offsetWidth;
+        cameraHud.classList.add("active");
+        setTimeout(() => {
+          cameraHud.classList.remove("active");
+        }, 450);
+      }
+
+      // 5. Update Photo Indicator Tabs
+      updatePhotoIndicators(slotIndex);
+    }
+
+    function updatePhotoIndicators(slotIndex) {
+      const slotButtons = document.querySelectorAll(".photo-slot-btn");
+      slotButtons.forEach(btn => {
+        const slot = parseInt(btn.getAttribute("data-slot"), 10);
+        if (slot === slotIndex) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      // Highlight active card in modal if open
+      for (let i = 0; i < 4; i++) {
+        const card = document.getElementById(`cardSlot${i}`);
+        if (card) {
+          if (i === slotIndex) {
+            card.classList.add("active-card");
+          } else {
+            card.classList.remove("active-card");
+          }
+        }
+      }
+    }
+
+    // ----------------------------------------------------------------------
+    // 7. PHOTO MANAGER MODAL & 4-PHOTO CONTROLS
+    // ----------------------------------------------------------------------
+    // Modal Open/Close
+    btnOpenPhotoModal.addEventListener("click", () => {
+      photoModalOverlay.classList.add("open");
+      updatePhotoIndicators(activePhotoIndex);
+    });
+
+    btnClosePhotoModal.addEventListener("click", () => {
+      photoModalOverlay.classList.remove("open");
+    });
+
+    photoModalOverlay.addEventListener("click", (e) => {
+      if (e.target === photoModalOverlay) {
+        photoModalOverlay.classList.remove("open");
+      }
+    });
+
+    // Test Cekrek Button in Modal
+    btnTestShutterModal.addEventListener("click", () => {
+      initAudio();
+      triggerCameraSnap(activePhotoIndex, true);
+      showToast("📸 Tes Shutter: Cekrek!");
+    });
+
+    // Toggle Shutter Sound in Modal
+    btnToggleSoundModal.addEventListener("click", () => {
+      shutterSoundEnabled = !shutterSoundEnabled;
+      btnToggleSoundModal.textContent = shutterSoundEnabled ? "🔊 Suara: ON" : "🔇 Suara: OFF";
+      showToast(shutterSoundEnabled ? "🔊 Efek Suara Cekrek Aktif" : "🔇 Efek Suara Cekrek Dinonaktifkan");
+    });
+
+    // Reset to Default 4 Photos
+    btnResetPhotosModal.addEventListener("click", () => {
+      photoDataUrls = [...DEFAULT_PHOTO_URLS];
+      loadAllPhotos();
+      for (let i = 0; i < 4; i++) {
+        const thumb = document.getElementById(`thumb${i}`);
+        if (thumb) thumb.src = photoDataUrls[i];
+      }
+      showToast("↺ 4 Foto di-reset ke foto pasangan default!");
+      previewSingleSlot(0);
+    });
+
+    // Individual Slot "Ganti" & "Lihat"
+    for (let i = 0; i < 4; i++) {
+      const slotIndex = i;
+      const btnChange = document.getElementById(`btnChangeSlot${slotIndex}`);
+      const btnPrevSlot = document.getElementById(`btnPreviewSlot${slotIndex}`);
+      const picker = document.getElementById(`slotPicker${slotIndex}`);
+
+      if (btnChange && picker) {
+        btnChange.addEventListener("click", () => {
+          picker.click();
+        });
+
+        picker.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            replaceSlotPhoto(slotIndex, file);
+          }
+          picker.value = "";
+        });
+      }
+
+      if (btnPrevSlot) {
+        btnPrevSlot.addEventListener("click", () => {
+          previewSingleSlot(slotIndex);
+          photoModalOverlay.classList.remove("open");
+        });
+      }
+    }
+
+    function replaceSlotPhoto(slotIndex, file) {
+      if (!file || !file.type.startsWith("image/")) {
+        showToast("⚠️ Silakan pilih file gambar (JPG/PNG)");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        photoDataUrls[slotIndex] = dataUrl;
+
+        const img = new Image();
+        img.onload = () => {
+          photoImageObjects[slotIndex] = img;
+          const thumb = document.getElementById(`thumb${slotIndex}`);
+          if (thumb) thumb.src = dataUrl;
+          currentSourceType = "image";
+          showToast(`✅ Foto ${slotIndex + 1} berhasil diganti!`);
+          previewSingleSlot(slotIndex);
+        };
+        img.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function previewSingleSlot(slotIndex) {
+      initAudio();
+      activePhotoIndex = slotIndex;
+      isPreviewForced = true;
+      btnTestPreview.classList.add("highlight");
+      btnTestPreview.textContent = "✕ Tutup Prev";
+      triggerCameraSnap(slotIndex, true);
+      showToast(`👁️ Preview Foto ${slotIndex + 1} (Bisa geser letak teks lirik)`);
+    }
+
+    // Batch Upload 4 Photos
+    btnPickAllFiles.addEventListener("click", () => {
+      batchPicker.click();
+    });
+
+    batchPicker.addEventListener("change", (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length > 0) {
+        handleBatchFiles(files);
+      }
+      batchPicker.value = "";
+    });
+
+    function handleBatchFiles(files) {
+      const imageFiles = files.filter(f => f.type.startsWith("image/"));
+      if (imageFiles.length === 0) {
+        showToast("⚠️ Tidak ada file foto yang dipilih.");
+        return;
+      }
+
+      const limit = Math.min(imageFiles.length, 4);
+      for (let i = 0; i < limit; i++) {
+        const slot = i;
+        const file = imageFiles[i];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const dataUrl = ev.target.result;
+          photoDataUrls[slot] = dataUrl;
+          const img = new Image();
+          img.onload = () => {
+            photoImageObjects[slot] = img;
+            const thumb = document.getElementById(`thumb${slot}`);
+            if (thumb) thumb.src = dataUrl;
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      showToast(`✅ ${limit} foto berhasil dimuat untuk urutan chorus!`);
+      setTimeout(() => previewSingleSlot(0), 150);
+    }
+
+    // On-Screen Photo Indicator Tab Buttons (Click to Jump to photo in song!)
+    document.querySelectorAll(".photo-slot-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const slot = parseInt(btn.getAttribute("data-slot"), 10);
+        const targetTimes = [23.2, 26.7, 31.0, 34.1];
+
+        if (audio.duration && !isPreviewForced) {
+          audio.currentTime = targetTimes[slot];
+          if (audio.paused) {
+            initAudio();
+            audio.play();
+            btnPlayPause.textContent = "⏸";
+          }
+        }
+        triggerCameraSnap(slot, true);
+        showToast(`📸 Foto ${slot + 1} (${photoSlotMeta[slot].lyric})`);
+      });
+    });
+
+    // General / Legacy Media file input
+    function loadMediaFile(file) {
+      if (!file) return;
+
+      if (file.type.startsWith("image/")) {
+        replaceSlotPhoto(activePhotoIndex, file);
+      } else if (file.type.startsWith("video/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          hiddenVideo.src = e.target.result;
+          hiddenVideo.play();
+          currentSourceType = "video";
+          isPreviewForced = false;
+          btnTestPreview.classList.remove("highlight");
+          btnTestPreview.textContent = "👁️ Preview";
+          showToast("✅ Video dimuat! Akan muncul saat Chorus (23.2s)");
+        };
+        reader.readAsDataURL(file);
+      } else {
+        showToast("⚠️ Format file tidak didukung. Pilih foto (JPG, PNG) atau video (MP4).");
+      }
+    }
+
+    bgFileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      loadMediaFile(file);
+      bgFileInput.value = "";
+    });
+
+    // Drag & Drop anywhere on screen
+    window.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dragDropOverlay.classList.add("active");
+    });
+
+    window.addEventListener("dragleave", (e) => {
+      if (e.relatedTarget === null) {
+        dragDropOverlay.classList.remove("active");
+      }
+    });
+
+    window.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dragDropOverlay.classList.remove("active");
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 1) {
+          handleBatchFiles(files);
+        } else {
+          loadMediaFile(files[0]);
+        }
+      }
+    });
+
+    // Paste from clipboard (Ctrl + V)
+    window.addEventListener("paste", (e) => {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      for (const item of items) {
+        if (item.kind === "file" && item.type.startsWith("image/")) {
+          loadMediaFile(item.getAsFile());
+          showToast("📋 Gambar dari Clipboard berhasil dipasang!");
+          break;
+        }
+      }
+    });
+
+    // Manual Test Preview Button
+    btnTestPreview.addEventListener("click", () => {
+      isPreviewForced = !isPreviewForced;
+      if (isPreviewForced) {
+        btnTestPreview.classList.add("highlight");
+        btnTestPreview.textContent = "✕ Tutup Prev";
+        triggerCameraSnap(activePhotoIndex, true);
+        showToast("👁️ Preview Foto Aktif! (Bisa geser teks sesuka hati)");
+      } else {
+        btnTestPreview.classList.remove("highlight");
+        btnTestPreview.textContent = "👁️ Preview";
+        showToast("👁️ Preview Dimatikan");
+      }
+    });
+
+    // ----------------------------------------------------------------------
+    // 7. AUDIO EQUALIZER VISUALIZER (Retro Dot-Matrix Bars)
+    // ----------------------------------------------------------------------
+    function renderVisualizer(time) {
+      vizCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+      const width = visualizerCanvas.width;
+      const height = visualizerCanvas.height;
+
+      // Adjust bar count dynamically for mobile screen width
+      const barCount = width < 400 ? 28 : 38;
+      const barWidth = width < 400 ? 5 : 6;
+      const gap = (width - (barCount * barWidth)) / (barCount - 1);
+      const dotSize = 3;
+      const dotGap = 2;
+
+      let freqs = [];
+      if (analyser && !audio.paused) {
+        analyser.getByteFrequencyData(dataArray);
+        for (let i = 0; i < barCount; i++) {
+          const idx = Math.floor(i * (dataArray.length / barCount));
+          freqs.push(dataArray[idx] / 255);
+        }
+      } else {
+        for (let i = 0; i < barCount; i++) {
+          const v = Math.sin(time * 0.003 + i * 0.35) * 0.2 + 0.25;
+          freqs.push(Math.max(0.08, v));
+        }
+      }
+
+      for (let i = 0; i < barCount; i++) {
+        const x = i * (barWidth + gap);
+        const colHeight = Math.floor(freqs[i] * (height - 4));
+        const numDots = Math.floor(colHeight / (dotSize + dotGap));
+
+        for (let d = 0; d < numDots; d++) {
+          const y = height - (d * (dotSize + dotGap)) - dotSize;
+          if (d > numDots - 2) {
+            vizCtx.fillStyle = "rgba(255, 255, 255, 0.95)";
+          } else {
+            vizCtx.fillStyle = "rgba(200, 200, 255, 0.75)";
+          }
+          vizCtx.fillRect(x, y, barWidth, dotSize);
+        }
+      }
+    }
+
+    // ----------------------------------------------------------------------
+    // 8. HIGH-DEFINITION BACKGROUND RENDERING
+    // ----------------------------------------------------------------------
+    function renderBackground(timestamp) {
+      const time = audio.currentTime;
+      const isChorus = (time >= 23.2 && time < 38.8);
+
+      const shouldShow = isPreviewForced ? true : (isChorus && time >= 7.8);
+
+      if (shouldShow) {
+        bgCanvas.classList.add("active");
+        if (ambientBackdrop) {
+          ambientBackdrop.classList.add("active");
+          const curUrl = photoDataUrls[activePhotoIndex] || DEFAULT_PHOTO_URLS[0];
+          if (ambientBackdrop.dataset.currentSrc !== curUrl) {
+            ambientBackdrop.dataset.currentSrc = curUrl;
+            ambientBackdrop.style.backgroundImage = `url('${curUrl}')`;
+          }
+        }
+        if (photoIndicatorBar) photoIndicatorBar.classList.add("visible");
+      } else {
+        bgCanvas.classList.remove("active");
+        if (ambientBackdrop) ambientBackdrop.classList.remove("active");
+        if (photoIndicatorBar) photoIndicatorBar.classList.remove("visible");
+        return;
+      }
+
+      const canvasW = bgCanvas.width;
+      const canvasH = bgCanvas.height;
+
+      let srcW = 0, srcH = 0, sourceEl = null;
+
+      if (currentSourceType === "video" && !hiddenVideo.paused) {
+        sourceEl = hiddenVideo;
+        srcW = hiddenVideo.videoWidth || 1280;
+        srcH = hiddenVideo.videoHeight || 720;
+      } else {
+        const activeImg = photoImageObjects[activePhotoIndex] || photoImageObjects[0];
+        if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
+          sourceEl = activeImg;
+          srcW = activeImg.naturalWidth;
+          srcH = activeImg.naturalHeight;
+        } else if (bgImageObj && bgImageObj.complete && bgImageObj.naturalWidth > 0) {
+          sourceEl = bgImageObj;
+          srcW = bgImageObj.naturalWidth;
+          srcH = bgImageObj.naturalHeight;
+        }
+      }
+
+      bgCtx.clearRect(0, 0, canvasW, canvasH);
+
+      if (!sourceEl || srcW === 0 || srcH === 0) return;
+
+      const imgAspect = srcW / srcH;
+      const screenAspect = canvasW / canvasH;
+
+      let dispW = 0, dispH = 0, dispX = 0, dispY = 0;
+
+      if (fitMode === "auto") {
+        // SMART TIKTOK PAS MODE (Standardized 9:16 vertical framing)
+        if (screenAspect > 0.62) {
+          // Desktop widescreen: Center 9:16 frame with ambient blurred wings
+          const frameH = canvasH * 0.96 * userScale;
+          const frameW = frameH * (9 / 16);
+          const frameX = (canvasW - frameW) / 2;
+          const frameY = (canvasH - frameH) / 2;
+
+          // Darken ambient background outside frame
+          bgCtx.fillStyle = "rgba(0, 0, 0, 0.45)";
+          bgCtx.fillRect(0, 0, canvasW, canvasH);
+
+          // Fit image inside frame proportionally
+          if (imgAspect < (9 / 16)) {
+            dispH = frameH;
+            dispW = dispH * imgAspect;
+          } else {
+            dispW = frameW;
+            dispH = dispW / imgAspect;
+          }
+          dispX = frameX + (frameW - dispW) / 2;
+          dispY = frameY + (frameH - dispH) / 2;
+
+          // Frame drop shadow & border
+          bgCtx.save();
+          bgCtx.shadowColor = "rgba(0, 0, 0, 0.85)";
+          bgCtx.shadowBlur = 30;
+          bgCtx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+          bgCtx.lineWidth = 1.5;
+          bgCtx.strokeRect(frameX, frameY, frameW, frameH);
+          bgCtx.restore();
+
+        } else {
+          // Mobile Smartphone: Vertical screen (9:16 / 9:19.5)
+          // Fit height and width cleanly so faces and feet are never cut off
+          if (imgAspect < screenAspect) {
+            dispH = canvasH * userScale;
+            dispW = dispH * imgAspect;
+          } else {
+            dispW = canvasW * userScale;
+            dispH = dispW / imgAspect;
+          }
+          dispX = (canvasW - dispW) / 2;
+          dispY = (canvasH - dispH) / 2;
+        }
+
+      } else if (fitMode === "cover") {
+        // FULL COVER MODE
+        if (screenAspect > 0.62) {
+          const frameH = canvasH * 0.98 * userScale;
+          const frameW = frameH * (9 / 16);
+          const frameX = (canvasW - frameW) / 2;
+          const frameY = (canvasH - frameH) / 2;
+
+          bgCtx.fillStyle = "rgba(0, 0, 0, 0.45)";
+          bgCtx.fillRect(0, 0, canvasW, canvasH);
+
+          if (imgAspect > (9 / 16)) {
+            dispH = frameH;
+            dispW = dispH * imgAspect;
+          } else {
+            dispW = frameW;
+            dispH = dispW / imgAspect;
+          }
+          dispX = frameX + (frameW - dispW) / 2;
+          dispY = frameY + (frameH - dispH) / 2;
+        } else {
+          if (imgAspect > screenAspect) {
+            dispH = canvasH * userScale;
+            dispW = dispH * imgAspect;
+          } else {
+            dispW = canvasW * userScale;
+            dispH = dispW / imgAspect;
+          }
+          dispX = (canvasW - dispW) / 2;
+          dispY = (canvasH - dispH) / 2;
+        }
+
+      } else {
+        // PURE ORIGINAL FIT MODE
+        if (imgAspect < screenAspect) {
+          dispH = canvasH * 0.95 * userScale;
+          dispW = dispH * imgAspect;
+        } else {
+          dispW = canvasW * 0.95 * userScale;
+          dispH = dispW / imgAspect;
+        }
+        dispX = (canvasW - dispW) / 2;
+        dispY = (canvasH - dispH) / 2;
+      }
+
+      // MODE 1: FOTO JELAS ASLI (TANPA BINTIK-BINTIK / CRYSTAL CLEAR HD)
+      if (visualStyle === "clean" || visualStyle === "scanline") {
+        bgCtx.save();
+        bgCtx.imageSmoothingEnabled = true;
+        bgCtx.imageSmoothingQuality = "high";
+        bgCtx.drawImage(sourceEl, dispX, dispY, dispW, dispH);
+        bgCtx.restore();
+
+        if (visualStyle === "scanline") {
+          bgCtx.fillStyle = "rgba(0, 0, 0, 0.22)";
+          for (let y = Math.max(0, Math.floor(dispY)); y < Math.min(canvasH, dispY + dispH); y += 4) {
+            bgCtx.fillRect(dispX, y, dispW, 2);
+          }
+        }
+
+        const grad = bgCtx.createRadialGradient(
+          dispX + dispW / 2, dispY + dispH / 2, Math.min(dispW, dispH) * 0.4,
+          dispX + dispW / 2, dispY + dispH / 2, Math.max(dispW, dispH) * 0.85
+        );
+        grad.addColorStop(0, "rgba(0, 0, 0, 0)");
+        grad.addColorStop(0.7, "rgba(0, 0, 0, 0.22)");
+        grad.addColorStop(1, "rgba(0, 0, 0, 0.65)");
+        bgCtx.fillStyle = grad;
+        bgCtx.fillRect(dispX, dispY, dispW, dispH);
+        return;
+      }
+
+      // MODE 2: ASCII MATRIX
+      const cellH = Math.max(8, Math.round(canvasH / 95));
+      const cellW = Math.round(cellH * 0.58);
+      const cols = Math.floor(canvasW / cellW);
+      const rows = Math.floor(canvasH / cellH);
+
+      sampleCanvas.width = cols;
+      sampleCanvas.height = rows;
+      sampleCtx.fillStyle = "#000000";
+      sampleCtx.fillRect(0, 0, cols, rows);
+
+      const sampX = dispX / cellW;
+      const sampY = dispY / cellH;
+      const sampW = dispW / cellW;
+      const sampH = dispH / cellH;
+
+      sampleCtx.drawImage(sourceEl, sampX, sampY, sampW, sampH);
+
+      const imgData = sampleCtx.getImageData(0, 0, cols, rows);
+      const data = imgData.data;
+
+      bgCtx.font = `${Math.floor(cellH * 1.05)}px 'Space Mono', monospace`;
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+
+      const charsLen = ASCII_CHARS.length;
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const idx = (y * cols + x) * 4;
+          let r = data[idx];
+          let g = data[idx + 1];
+          let b = data[idx + 2];
+          if (r < 8 && g < 8 && b < 8) continue;
+
+          const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          if (luma < 0.05) continue;
+
+          const charIdx = Math.min(charsLen - 1, Math.floor(luma * charsLen));
+          const char = ASCII_CHARS[charIdx];
+
+          bgCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          bgCtx.fillText(char, x * cellW + cellW / 2, y * cellH + cellH / 2);
+        }
+      }
+    }
+
+    // ----------------------------------------------------------------------
+    // 9. MAIN ANIMATION & SYNC LOOP
+    // ----------------------------------------------------------------------
+    let lastLyricText = "";
+
+    function mainLoop(timestamp) {
+      const curTime = audio.currentTime;
+      const duration = audio.duration || 42;
+
+      // Time & Progress
+      timeCurrent.textContent = formatTime(curTime);
+      timeTotal.textContent = formatTime(duration);
+      const progressPercent = (curTime / duration) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+
+      // 1. Title Screen vs Player Dock Visibility
+      if (curTime < 7.8) {
+        titleScreen.classList.remove("hidden");
+        playerDock.classList.remove("active");
+        lyricPill.classList.remove("visible");
+        lyricDisplay.textContent = "";
+      } else {
+        titleScreen.classList.add("hidden");
+        playerDock.classList.add("active");
+      }
+
+      // 2. Lyrics Synchronization
+      let currentWord = "";
+      for (let i = 0; i < lyricsData.length; i++) {
+        const item = lyricsData[i];
+        if (curTime >= item.start && curTime <= item.end) {
+          currentWord = item.text;
+          break;
+        }
+      }
+
+      // 2b. 4-Photo Chorus Drop Synchronization (23.2s - 38.8s) with "Cekrek" Camera Snap
+      if (curTime >= 23.2 && curTime < 38.8) {
+        if (!isPreviewForced) {
+          let targetIndex = 0;
+          if (curTime >= 34.1) {
+            targetIndex = 3;
+          } else if (curTime >= 31.0) {
+            targetIndex = 2;
+          } else if (curTime >= 26.7) {
+            targetIndex = 1;
+          } else {
+            targetIndex = 0;
+          }
+
+          if (targetIndex !== lastPhotoIndex) {
+            lastPhotoIndex = targetIndex;
+            triggerCameraSnap(targetIndex, true);
+          }
+        }
+      } else {
+        if (curTime < 23.2) {
+          lastPhotoIndex = -1;
+        }
+      }
+
+      // 3. Outro Box at 39.2s onwards (Shows "EDIT BY JAFFIER" signature card!)
+      if (curTime >= 39.2) {
+        currentWord = "";
+        outroBox.classList.add("active");
+      } else {
+        outroBox.classList.remove("active");
+      }
+
+      // 4. Update lyric text with pop effect & visibility of backing pill
+      if (currentWord !== lastLyricText) {
+        lastLyricText = currentWord;
+        lyricDisplay.textContent = currentWord;
+        if (currentWord !== "") {
+          lyricPill.classList.add("visible");
+          lyricDisplay.style.animation = 'none';
+          lyricDisplay.offsetHeight; // force reflow
+          lyricDisplay.style.animation = 'popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        } else {
+          lyricPill.classList.remove("visible");
+        }
+      }
+
+      // 5. Render Visualizer & Background
+      renderVisualizer(timestamp);
+      renderBackground(timestamp);
+
+      requestAnimationFrame(mainLoop);
+    }
+
+    requestAnimationFrame(mainLoop);
+  </script>
+</body>
+</html>
