@@ -1,11 +1,11 @@
 # 📸 Olivia Rodrigo — Drop Dead (TikTok Aesthetic 4-Photo Lyrics Player)
 
-[![GitHub Pages](https://img.shields.io/badge/Live-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github)](https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/)
-[![TikTok Edit](https://img.shields.io/badge/TikTok-Edit%20by%20Jaffier-fe2c55?style=for-the-badge&logo=tiktok)](https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/)
+[![GitHub Pages](https://img.shields.io/badge/Live-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github)](https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/)
+[![TikTok Edit](https://img.shields.io/badge/TikTok-Edit%20by%20Jaffier-fe2c55?style=for-the-badge&logo=tiktok)](https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/)
 
 Project web player lirik aesthetic bergaya TikTok viral dengan fitur **4-Photo Transition bergaya kamera shutter snap ("Cekrek-cekrek")**, dynamic ambient glow backdrop, visualizer audio LED dot-matrix, dan sinkronisasi lirik vokal presisi.
 
-> 🌐 **Live Demo Website**: [https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/](https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/)
+> 🌐 **Live Demo Website**: [https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/](https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/)
 
 ---
 
@@ -36,12 +36,12 @@ Project web player lirik aesthetic bergaya TikTok viral dengan fitur **4-Photo T
 
 ### Opsi 1: Buka Langsung di Web (Tanpa Install Apapun)
 Cukup buka link live GitHub Pages:
-👉 **[https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/](https://muhammadjaffier547-dotcom.github.io/tiktok-lyrics-dropdead/)**
+👉 **[https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/](https://muhammadjaffier547-dotcom.github.io/for-u-from-jaffier/)**
 
 ### Opsi 2: Buka di VS Code ("Open with Live Server")
 1. Clone repositori ini:
    ```bash
-   git clone https://github.com/muhammadjaffier547-dotcom/tiktok-lyrics-dropdead.git
+   git clone https://github.com/muhammadjaffier547-dotcom/for-u-from-jaffier.git
    ```
 2. Buka folder di VS Code.
 3. Klik kanan pada `index.html` -> pilih **"Open with Live Server"**.
