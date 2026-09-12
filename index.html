@@ -1235,7 +1235,7 @@
 
     <!-- Lyrics Container (Positioned safely below chin & face, with touch & mouse drag support!) -->
     <div class="lyrics-container" id="lyricsContainer" title="💡 Sentuh & geser untuk memindahkan posisi teks sesuka hati!">
-      <div class="lyric-pill" id="lyricPill">
+      <div class="lyric-pill no-box" id="lyricPill">
         <div class="lyric-text" id="lyricDisplay"></div>
       </div>
     </div>
@@ -1292,9 +1292,7 @@
 
     <!-- Secondary Controls (Collapsible on Mobile, always open on Desktop) -->
     <button class="tool-btn mobile-hide highlight" id="btnPosText" title="Ubah letak posisi lirik (Bawah / Tengah / Atas)">📍 Posisi: Bawah</button>
-    <button class="tool-btn mobile-hide highlight" id="btnToggleBox" title="Toggle background hitam di balik teks lirik">🏷️ Box Hitam</button>
     <button class="tool-btn mobile-hide highlight" id="btnStyleMode" title="Ubah tampilan: Foto Jelas / Scanline / ASCII">✨ Gaya: Foto Jelas</button>
-    <button class="tool-btn mobile-hide highlight" id="btnFitMode" title="Ubah mode: TikTok Pas / Full Layar / Foto Asli">✨ TikTok Pas</button>
     
     <!-- Zoom Controls -->
     <div class="zoom-group mobile-hide">
@@ -1529,8 +1527,6 @@
 
     const btnMobileMenu = document.getElementById("btnMobileMenu");
     const btnStyleMode = document.getElementById("btnStyleMode");
-    const btnFitMode = document.getElementById("btnFitMode");
-    const btnToggleBox = document.getElementById("btnToggleBox");
     const btnPosText = document.getElementById("btnPosText");
     const btnZoomIn = document.getElementById("btnZoomIn");
     const btnZoomOut = document.getElementById("btnZoomOut");
@@ -1555,7 +1551,7 @@
     let analyser = null;
     let dataArray = null;
     let isPreviewForced = false;
-    let isBoxBgActive = true;
+    let isBoxBgActive = false;
     let currentSourceType = "image";
     let creatorName = "jaffier";
     let isMobileMenuOpen = false;
@@ -1845,22 +1841,6 @@
     // ----------------------------------------------------------------------
     // 5. STYLE, SIZING & WATERMARK CONTROLS
     // ----------------------------------------------------------------------
-    // Toggle Text Box Background
-    btnToggleBox.addEventListener("click", () => {
-      isBoxBgActive = !isBoxBgActive;
-      if (isBoxBgActive) {
-        lyricPill.classList.remove("no-box");
-        btnToggleBox.textContent = "🏷️ Box Hitam: ON";
-        btnToggleBox.classList.add("highlight");
-        showToast("🏷️ Latar Teks: Box Hitam Aktif (Kontras Maksimal)");
-      } else {
-        lyricPill.classList.add("no-box");
-        btnToggleBox.textContent = "🏷️ Box Hitam: OFF";
-        btnToggleBox.classList.remove("highlight");
-        showToast("🏷️ Latar Teks: Outline Saja (Tanpa Box)");
-      }
-    });
-
     // Change Creator Watermark Name
     btnChangeName.addEventListener("click", () => {
       const newName = prompt("Masukkan nama/username kredit kamu:", creatorName);
@@ -1890,23 +1870,6 @@
         btnStyleMode.textContent = "✨ Gaya: Foto Jelas";
         btnStyleMode.classList.add("highlight");
         showToast("✨ Mode: Foto Jelas Asli (Tanpa Bintik)");
-      }
-    });
-
-    // Toggle Sizing Mode: auto (TikTok Pas) -> cover (Full Layar) -> contain (Foto Asli)
-    btnFitMode.addEventListener("click", () => {
-      if (fitMode === "auto") {
-        fitMode = "cover";
-        btnFitMode.textContent = "📏 Full Layar";
-        showToast("📏 Mode: Full Layar Penuh (Edge to Edge)");
-      } else if (fitMode === "cover") {
-        fitMode = "contain";
-        btnFitMode.textContent = "📐 Foto Asli";
-        showToast("📐 Mode: Foto Asli (Proporsional Tanpa Terpotong)");
-      } else {
-        fitMode = "auto";
-        btnFitMode.textContent = "✨ TikTok Pas";
-        showToast("✨ Mode: TikTok 9:16 Pas + Ambient Blur");
       }
     });
 
