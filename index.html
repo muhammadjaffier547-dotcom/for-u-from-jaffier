@@ -943,7 +943,7 @@
       box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 0 50px rgba(255, 105, 180, 0.2);
       border-radius: 14px;
       width: 100%;
-      max-width: 680px;
+      max-width: 760px;
       max-height: 90vh;
       overflow-y: auto;
       display: flex;
@@ -1002,7 +1002,7 @@
 
     .photo-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
     }
 
@@ -1254,9 +1254,10 @@
     <!-- Photo Indicator Bar (Active during Chorus Drop: 23.2s - 38.8s or Preview) -->
     <div class="photo-indicator-bar" id="photoIndicatorBar">
       <button class="photo-slot-btn active" data-slot="0" title="Foto 1: Bathroom Line (23.2s)">📸 1</button>
-      <button class="photo-slot-btn" data-slot="1" title="Foto 2: Versailles (27.2s)">📸 2</button>
+      <button class="photo-slot-btn" data-slot="1" title="Foto 2: Versailles (26.7s)">📸 2</button>
       <button class="photo-slot-btn" data-slot="2" title="Foto 3: Most Alive (31.0s)">📸 3</button>
-      <button class="photo-slot-btn" data-slot="3" title="Foto 4: Kiss Me (34.6s)">📸 4</button>
+      <button class="photo-slot-btn" data-slot="3" title="Foto 4: Kiss Me (34.1s)">📸 4</button>
+      <button class="photo-slot-btn" data-slot="4" title="Foto 5: I Might (36.6s)">📸 5</button>
     </div>
 
     <!-- Player Dock with Equalizer & Controls -->
@@ -1286,7 +1287,7 @@
   <!-- Top Toolbar -->
   <div class="top-toolbar">
     <!-- Primary Always-Visible Buttons on Mobile -->
-    <button class="tool-btn highlight" id="btnOpenPhotoModal" title="Atur 4 foto chorus drop & animasi cekrek">📸 4 Foto Drop</button>
+    <button class="tool-btn highlight" id="btnOpenPhotoModal" title="Atur 5 foto chorus drop & animasi cekrek">📸 5 Foto Drop</button>
     <button class="tool-btn highlight" id="btnMobileMenu" title="Buka menu pengaturan lengkap">⚙️ Menu</button>
 
     <!-- Secondary Controls (Collapsible on Mobile, always open on Desktop) -->
@@ -1316,11 +1317,11 @@
   <div class="modal-overlay" id="photoModalOverlay">
     <div class="photo-modal">
       <div class="modal-header">
-        <div class="modal-title">📸 4 FOTO CHORUS DROP</div>
+        <div class="modal-title">📸 5 FOTO CHORUS DROP</div>
         <button class="modal-close-btn" id="btnClosePhotoModal">✕</button>
       </div>
       <div class="modal-desc">
-        4 foto berganti otomatis dengan animasi cekrek-cekrek kamera saat Chorus Drop (23.2s - 38.8s). Kamu bisa ubah atau ganti foto mana saja!
+        5 foto berganti otomatis dengan animasi cekrek-cekrek kamera saat Chorus Drop (23.2s - 38.8s). Kamu bisa ubah atau ganti foto mana saja!
       </div>
 
       <div class="photo-grid">
@@ -1342,7 +1343,7 @@
         <!-- Slot 2 -->
         <div class="photo-card" id="cardSlot1">
           <div class="card-thumb-wrap">
-            <img id="thumb1" src="photo2.png" alt="Foto 2" class="card-thumb" />
+            <img id="thumb1" src="photo2.jpg" alt="Foto 2" class="card-thumb" />
             <span class="card-badge">2 • 26.7s</span>
           </div>
           <div class="card-info">
@@ -1357,7 +1358,7 @@
         <!-- Slot 3 -->
         <div class="photo-card" id="cardSlot2">
           <div class="card-thumb-wrap">
-            <img id="thumb2" src="photo3.jpg" alt="Foto 3" class="card-thumb" />
+            <img id="thumb2" src="photo3.png" alt="Foto 3" class="card-thumb" />
             <span class="card-badge">3 • 31.0s</span>
           </div>
           <div class="card-info">
@@ -1372,7 +1373,7 @@
         <!-- Slot 4 -->
         <div class="photo-card" id="cardSlot3">
           <div class="card-thumb-wrap">
-            <img id="thumb3" src="photo4.jpg" alt="Foto 4" class="card-thumb" />
+            <img id="thumb3" src="photo4.png" alt="Foto 4" class="card-thumb" />
             <span class="card-badge">4 • 34.1s</span>
           </div>
           <div class="card-info">
@@ -1383,10 +1384,25 @@
             <button class="card-btn-action preview" id="btnPreviewSlot3">👁️ Lihat</button>
           </div>
         </div>
+
+        <!-- Slot 5 -->
+        <div class="photo-card" id="cardSlot4">
+          <div class="card-thumb-wrap">
+            <img id="thumb4" src="photo5.jpg" alt="Foto 5" class="card-thumb" />
+            <span class="card-badge">5 • 36.6s</span>
+          </div>
+          <div class="card-info">
+            <div class="card-lyric">"And I Might"</div>
+          </div>
+          <div class="card-btn-row">
+            <button class="card-btn-action change" id="btnChangeSlot4">📁 Ganti</button>
+            <button class="card-btn-action preview" id="btnPreviewSlot4">👁️ Lihat</button>
+          </div>
+        </div>
       </div>
 
       <div class="modal-actions-bar">
-        <button class="modal-btn primary" id="btnPickAllFiles">⚡ Ganti Sekaligus (Pilih 4 Foto)</button>
+        <button class="modal-btn primary" id="btnPickAllFiles">⚡ Ganti Sekaligus (Pilih 5 Foto)</button>
         <button class="modal-btn" id="btnTestShutterModal">📸 Tes Cekrek</button>
         <button class="modal-btn" id="btnToggleSoundModal">🔊 Suara: ON</button>
         <button class="modal-btn" id="btnResetPhotosModal">↺ Reset Default</button>
@@ -1397,6 +1413,7 @@
       <input type="file" id="slotPicker1" accept="image/*" style="display:none;" />
       <input type="file" id="slotPicker2" accept="image/*" style="display:none;" />
       <input type="file" id="slotPicker3" accept="image/*" style="display:none;" />
+      <input type="file" id="slotPicker4" accept="image/*" style="display:none;" />
       <input type="file" id="batchPicker" accept="image/*" multiple style="display:none;" />
     </div>
   </div>
@@ -1554,24 +1571,26 @@
     let userScale = 1.0;     
 
     // ----------------------------------------------------------------------
-    // 4 DEFAULT PHOTOS & CAMERA SHUTTER STATE (Exact Lyrics Vocal Sync)
+    // 5 DEFAULT PHOTOS & CAMERA SHUTTER STATE (Exact Lyrics Vocal Sync)
     // ----------------------------------------------------------------------
     const DEFAULT_PHOTO_URLS = [
       "photo1.jpg",
-      "photo2.png",
-      "photo3.jpg",
-      "photo4.jpg"
+      "photo2.jpg",
+      "photo3.png",
+      "photo4.png",
+      "photo5.jpg"
     ];
 
     const photoSlotMeta = [
       { index: 0, start: 23.2, end: 26.7, lyric: "All Pressed Up In The Bathroom Line" },
       { index: 1, start: 26.7, end: 31.0, lyric: "Lookin' Like An Angel On The Walls Of Versailles" },
       { index: 2, start: 31.0, end: 34.1, lyric: "The Most Alive I've Ever Been" },
-      { index: 3, start: 34.1, end: 38.8, lyric: "But Kiss Me And I Might..." }
+      { index: 3, start: 34.1, end: 36.6, lyric: "But Kiss Me..." },
+      { index: 4, start: 36.6, end: 38.8, lyric: "And I Might..." }
     ];
 
     let photoDataUrls = [...DEFAULT_PHOTO_URLS];
-    let photoImageObjects = [new Image(), new Image(), new Image(), new Image()];
+    let photoImageObjects = [new Image(), new Image(), new Image(), new Image(), new Image()];
 
     function loadAllPhotos() {
       photoDataUrls.forEach((url, idx) => {
@@ -2015,7 +2034,7 @@
       // 4. Viewfinder HUD
       if (cameraHud) {
         if (cameraHudText) {
-          cameraHudText.textContent = `● SHUTTER [0${slotIndex + 1}/04] • 1/250s`;
+          cameraHudText.textContent = `● SHUTTER [0${slotIndex + 1}/05] • 1/250s`;
         }
         cameraHud.classList.remove("active");
         void cameraHud.offsetWidth;
@@ -2041,7 +2060,7 @@
       });
 
       // Highlight active card in modal if open
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         const card = document.getElementById(`cardSlot${i}`);
         if (card) {
           if (i === slotIndex) {
@@ -2054,7 +2073,7 @@
     }
 
     // ----------------------------------------------------------------------
-    // 7. PHOTO MANAGER MODAL & 4-PHOTO CONTROLS
+    // 7. PHOTO MANAGER MODAL & 5-PHOTO CONTROLS
     // ----------------------------------------------------------------------
     // Modal Open/Close
     btnOpenPhotoModal.addEventListener("click", () => {
@@ -2086,20 +2105,20 @@
       showToast(shutterSoundEnabled ? "🔊 Efek Suara Cekrek Aktif" : "🔇 Efek Suara Cekrek Dinonaktifkan");
     });
 
-    // Reset to Default 4 Photos
+    // Reset to Default 5 Photos
     btnResetPhotosModal.addEventListener("click", () => {
       photoDataUrls = [...DEFAULT_PHOTO_URLS];
       loadAllPhotos();
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         const thumb = document.getElementById(`thumb${i}`);
         if (thumb) thumb.src = photoDataUrls[i];
       }
-      showToast("↺ 4 Foto di-reset ke foto pasangan default!");
+      showToast("↺ 5 Foto di-reset ke foto default!");
       previewSingleSlot(0);
     });
 
     // Individual Slot "Ganti" & "Lihat"
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       const slotIndex = i;
       const btnChange = document.getElementById(`btnChangeSlot${slotIndex}`);
       const btnPrevSlot = document.getElementById(`btnPreviewSlot${slotIndex}`);
@@ -2182,7 +2201,7 @@
         return;
       }
 
-      const limit = Math.min(imageFiles.length, 4);
+      const limit = Math.min(imageFiles.length, 5);
       for (let i = 0; i < limit; i++) {
         const slot = i;
         const file = imageFiles[i];
@@ -2209,7 +2228,7 @@
     document.querySelectorAll(".photo-slot-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         const slot = parseInt(btn.getAttribute("data-slot"), 10);
-        const targetTimes = [23.2, 26.7, 31.0, 34.1];
+        const targetTimes = [23.2, 26.7, 31.0, 34.1, 36.6];
 
         if (audio.duration && !isPreviewForced) {
           audio.currentTime = targetTimes[slot];
@@ -2610,11 +2629,13 @@
         }
       }
 
-      // 2b. 4-Photo Chorus Drop Synchronization (23.2s - 38.8s) with "Cekrek" Camera Snap
+      // 2b. 5-Photo Chorus Drop Synchronization (23.2s - 38.8s) with "Cekrek" Camera Snap
       if (curTime >= 23.2 && curTime < 38.8) {
         if (!isPreviewForced) {
           let targetIndex = 0;
-          if (curTime >= 34.1) {
+          if (curTime >= 36.6) {
+            targetIndex = 4;
+          } else if (curTime >= 34.1) {
             targetIndex = 3;
           } else if (curTime >= 31.0) {
             targetIndex = 2;
